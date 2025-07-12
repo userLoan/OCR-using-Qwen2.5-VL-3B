@@ -64,6 +64,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
-- LangChain for the document processing pipeline
 - Ollama for the local language model hosting
 - Streamlit for the web interface framework

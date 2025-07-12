@@ -1,0 +1,11 @@
+streamlit
+langchain_core
+langchain_community
+langchain_ollama
+pypdf
+pdf2image
+pillow
+faiss-cpu
+openpyxl
+numpy==1.24.3
+typing-extensions==4.5.0

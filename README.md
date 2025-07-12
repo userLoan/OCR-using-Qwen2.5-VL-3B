@@ -14,6 +14,7 @@ pip install -r requirements.txt
 
 ```
 pdf-qa-system/
+├── streamlit.py
 ├── main.py                # Main application file
 ├── pdfs/                  # Directory for uploaded PDFs
 ├── requirements.txt       # Project dependencies
@@ -35,12 +36,11 @@ faiss-cpu
 openpyxl
 numpy==1.24.3
 typing-extensions==4.5.0
-
 ```
 
 ## Usage
 
-1. Start the Ollama service and ensure the Deepseek model is available:
+1. Start the Ollama service and ensure the Qwen2.5-VL-3B model is available:
 
 ```bash
 ollama run qwen2.5vl:3b

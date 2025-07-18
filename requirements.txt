@@ -1,6 +1,7 @@
 streamlit
 opencv-python-headless
 pypdf
+pymupdf
 pdf2image
 Pillow
 faiss-cpu

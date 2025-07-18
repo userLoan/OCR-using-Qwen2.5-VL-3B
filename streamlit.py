@@ -2,13 +2,14 @@ import streamlit as st
 import os
 import json
 import tempfile
+import re
 from pathlib import Path
 import pandas as pd
 from PIL import Image
 from preprocess import pdf_to_images, process_images_in_folder, poppler_path
 from main import extract_tax_data_from_image
 
-# Cấu hình giao diện
+# Giao diện
 st.set_page_config(page_title="PDFs to Excel", layout="wide")
 st.title("🧾 PDFs → Excel")
 
@@ -18,32 +19,28 @@ uploaded_files = st.file_uploader(
     accept_multiple_files=True
 )
 
-def markdown_table_to_dataframe(md_text):
-    try:
-        lines = md_text.strip().split('\n')
-        header = [h.strip() for h in lines[0].split('|') if h.strip()]
-        rows = []
-
-        for line in lines[2:]:  # Bỏ dòng header và --- separator
-            cells = [c.strip() for c in line.split('|') if c.strip()]
-            if len(cells) == len(header):
-                rows.append(cells)
-
-        df = pd.DataFrame(rows, columns=header)
-        return df if not df.empty else None
-    except Exception:
-        return None
-
 def try_parse_json(result):
     try:
         return json.loads(result)
     except json.JSONDecodeError:
-        # Trường hợp là chuỗi JSON object không có dấu [ ] bao quanh
         try:
             fixed = "[" + result.strip().rstrip(',') + "]"
             return json.loads(fixed)
         except Exception:
             return None
+
+def clean_and_parse_json_blocks(text):
+    """Xử lý chuỗi trả về bị encode sai và chuyển thành danh sách dict"""
+    blocks = re.findall(r"\{[^}]+\}", text, re.DOTALL)
+    cleaned = []
+    for block in blocks:
+        try:
+            block_fixed = block.replace('"""', '"').replace('\n', '').strip(',')
+            block_fixed = re.sub(r'""([^""]+?)""', r'"\1"', block_fixed)
+            cleaned.append(json.loads(block_fixed))
+        except json.JSONDecodeError:
+            continue
+    return cleaned if cleaned else None
 
 if uploaded_files:
     with tempfile.TemporaryDirectory() as temp_dir:
@@ -51,7 +48,6 @@ if uploaded_files:
             st.divider()
             st.subheader(f"📄 File {pdf_index}: {uploaded_file.name}")
 
-            # Lưu file PDF
             pdf_path = os.path.join(temp_dir, uploaded_file.name)
             with open(pdf_path, "wb") as f:
                 f.write(uploaded_file.read())
@@ -94,25 +90,17 @@ if uploaded_files:
                             result = extract_tax_data_from_image(img_path)
                             st.markdown(f"**📷 Ảnh: `{Path(img_path).name}`**")
 
-                            # 1. Thử parse JSON
                             parsed_json = try_parse_json(result)
+                            if not parsed_json:
+                                parsed_json = clean_and_parse_json_blocks(result)
+
                             if parsed_json:
                                 df = pd.DataFrame(parsed_json)
-                                st.dataframe(df)
                                 all_dataframes.append(df)
-                                continue
-
-                            # 2. Thử parse Markdown
-                            df_md = markdown_table_to_dataframe(result)
-                            if df_md is not None:
-                                st.dataframe(df_md)
-                                all_dataframes.append(df_md)
-                            else:
-                                st.code(result)
 
                     if all_dataframes:
                         final_df = pd.concat(all_dataframes, ignore_index=True)
-                        st.subheader("📊 Tổng hợp dữ liệu")
+                        st.subheader("📊 Output")
                         st.dataframe(final_df)
 
                         output_path = os.path.join(temp_dir, f"output_{pdf_index}.xlsx")
@@ -126,5 +114,9 @@ if uploaded_files:
                                 mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
                                 key=f"download_{pdf_index}"
                             )
+                    else:
+                        st.warning("⚠️ Không có dữ liệu hợp lệ.")
+            else:
+                st.info("📸 Vui lòng chọn ảnh để OCR.")
 else:
     st.info("📤 Hãy tải lên file PDF để bắt đầu.")

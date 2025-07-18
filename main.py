@@ -8,7 +8,7 @@ def extract_tax_data_from_image(image_path: str) -> str:
         base64_image = base64.b64encode(image_bytes).decode("utf-8")
 
     headers = {
-        "Authorization": "Bearer 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",
+        "Authorization": "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",
         "HTTP-Referer": "https://pdfs-to-excel-dtl-mamwcxcar6nsbk8l4cssa6.streamlit.app/",
         "X-Title": "PDFs to Excel",
         "Content-Type": "application/json"

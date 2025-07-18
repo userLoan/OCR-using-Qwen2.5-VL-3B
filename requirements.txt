@@ -2,10 +2,8 @@ streamlit
 pypdf
 pdf2image
 Pillow
-poppler-utils
 faiss-cpu
 openpyxl
 numpy==1.24.3
 typing-extensions==4.5.0
-python3-distutils
 setuptools

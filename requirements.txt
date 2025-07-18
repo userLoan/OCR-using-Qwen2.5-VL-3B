@@ -4,7 +4,8 @@ langchain_community
 langchain_ollama
 pypdf
 pdf2image
-pillow
+Pillow
+poppler-utils
 faiss-cpu
 openpyxl
 numpy==1.24.3

@@ -9,7 +9,7 @@ def extract_table_from_image(image_path):
     
     # Chuẩn bị headers
     headers = {
-        "Authorization": "Bearer sk-or-xxxxxxxxxxxxxxxxxxxxxxxx",
+        "Authorization": "Bearer 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",
         "Content-Type": "application/json",
         "HTTP-Referer": "https://your-app-name.streamlit.app/",
         "X-Title": "My OCR App"

@@ -1,4 +1,3 @@
-poppler-utils
 python3.11-distutils
 libgl1
 libgl1-mesa-glx

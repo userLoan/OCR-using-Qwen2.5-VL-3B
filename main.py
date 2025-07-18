@@ -2,7 +2,7 @@ import base64
 import requests
 import json
 
-def extract_table_from_image(image_path):
+def extract_tax_data_from_image(image_path):
     # Đọc ảnh và encode base64
     with open(image_path, "rb") as f:
         image_base64 = base64.b64encode(f.read()).decode("utf-8")

@@ -22,8 +22,9 @@ def extract_tax_data_from_image(image_url: str) -> str:
                         "text": "You are an OCR expert. Extract the table from the image and return it as a valid JSON array."
                     },
                     {
-                        "type": "image",
-                        "image_url": [image_path]
+                        "type": "image_url",
+                        "image_url": {
+                            "url": image_url
                         }
                     }
                 ]

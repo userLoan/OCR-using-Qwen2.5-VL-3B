@@ -1,5 +1,9 @@
 poppler-utils
 python3.11
 python3.11-distutils
+libgl1
 libgl1-mesa-glx
 libglib2.0-0
+ffmpeg 
+libsm6 
+libxext6

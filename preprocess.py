@@ -9,7 +9,7 @@ from pdf2image import convert_from_path
 def pdf_to_images(pdf_path, output_dir, dpi=300, poppler_path=None):
     try:
         os.makedirs(output_dir, exist_ok=True)
-        pages = convert_from_path(pdf_path, dpi=dpi, poppler_path=poppler_path)
+        pages = convert_from_path(pdf_path, dpi=dpi)
         image_paths = []
 
         for i, page in enumerate(pages):

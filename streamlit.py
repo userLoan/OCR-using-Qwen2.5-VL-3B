@@ -6,7 +6,7 @@ import re
 from pathlib import Path
 import pandas as pd
 from PIL import Image
-from preprocess import pdf_to_images, process_images_in_folder, poppler_path
+from preprocess import pdf_to_images, process_images_in_folder
 from main import extract_tax_data_from_image
 
 # Giao diện
@@ -58,7 +58,7 @@ if uploaded_files:
             os.makedirs(processed_dir, exist_ok=True)
 
             with st.spinner("📄 Đang tách PDF thành ảnh..."):
-                image_paths = pdf_to_images(pdf_path, image_dir, poppler_path=poppler_path)
+                image_paths = pdf_to_images(pdf_path, image_dir)
 
             if not image_paths:
                 st.warning("⚠️ Không tạo được ảnh từ file PDF.")

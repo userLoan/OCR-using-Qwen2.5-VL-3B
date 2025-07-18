@@ -10,3 +10,4 @@ numpy>=1.26.0
 typing-extensions==4.5.0
 setuptools
 ollama
+qwen-vl-utils[decord]==0.0.8

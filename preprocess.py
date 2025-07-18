@@ -1,6 +1,7 @@
 import os
 import cv2
 import glob
+import fitz
 import numpy as np
 from PIL import Image
 from pdf2image import convert_from_path

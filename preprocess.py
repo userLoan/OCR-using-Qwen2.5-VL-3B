@@ -4,31 +4,20 @@ import glob
 import numpy as np
 from PIL import Image
 from pdf2image import convert_from_path
-import platform
 
-def pdf_to_images(pdf_path, output_dir, dpi=300):
-    try:
-        os.makedirs(output_dir, exist_ok=True)
+def pdf_to_images(pdf_path, output_dir, zoom=2):
+    os.makedirs(output_dir, exist_ok=True)
+    doc = fitz.open(pdf_path)
+    image_paths = []
 
-        # Xác định poppler_path nếu chạy trên Windows
-        if platform.system() == "Windows":
-            poppler_path = r"F:\poppler-24.08.0\Library\bin"  # sửa lại đúng đường dẫn máy bạn
-        else:
-            poppler_path = None  # Trên Linux (Streamlit Cloud) không cần
+    for page_num in range(len(doc)):
+        page = doc.load_page(page_num)
+        pix = page.get_pixmap(matrix=fitz.Matrix(zoom, zoom))  # Zoom giúp tăng DPI
+        image_path = os.path.join(output_dir, f"page_{page_num + 1}.png")
+        pix.save(image_path)
+        image_paths.append(image_path)
 
-        pages = convert_from_path(pdf_path, dpi=dpi, poppler_path=poppler_path)
-        image_paths = []
-
-        for i, page in enumerate(pages):
-            image_name = f"{os.path.splitext(os.path.basename(pdf_path))[0]}_page_{i+1}.jpg"
-            image_path = os.path.join(output_dir, image_name)
-            page.save(image_path, "JPEG", quality=95)
-            image_paths.append(image_path)
-
-        return image_paths
-    except Exception as e:
-        print(f"✗ Error processing {pdf_path}: {e}")
-        return []
+    return image_paths
 
 # ====== Xử lý folder ảnh (clahe, nhị phân, giãn) ======
 def preprocess_image(image_path):

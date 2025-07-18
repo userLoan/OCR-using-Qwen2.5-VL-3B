@@ -16,7 +16,7 @@ pip install -r requirements.txt
 pdf-qa-system/
 ├── streamlit.py
 ├── main.py                # Main application file
-├── pdfs/                  # Directory for uploaded PDFs
+├── temp                   # Temporary directory
 ├── requirements.txt       # Project dependencies
 ├── .gitignore             # Git ignore file
 └── README.md              # Project documentation

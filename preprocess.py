@@ -1,15 +1,9 @@
-poppler_path = r"F:\poppler-24.08.0\Library\bin"
-
 import os
 import cv2
 import glob
 import numpy as np
 from PIL import Image
 from pdf2image import convert_from_path
-
-# ====== Kiểm tra poppler path (cho Windows) ======
-def check_poppler(poppler_path):
-    return os.path.exists(os.path.join(poppler_path, "pdftoppm.exe"))
 
 # ====== Chuyển 1 file PDF thành danh sách ảnh ======
 def pdf_to_images(pdf_path, output_dir, dpi=300, poppler_path=None):

@@ -4,12 +4,19 @@ import glob
 import numpy as np
 from PIL import Image
 from pdf2image import convert_from_path
+import platform
 
-# ====== Chuyển 1 file PDF thành danh sách ảnh ======
-def pdf_to_images(pdf_path, output_dir, dpi=300, poppler_path=None):
+def pdf_to_images(pdf_path, output_dir, dpi=300):
     try:
         os.makedirs(output_dir, exist_ok=True)
-        pages = convert_from_path(pdf_path, dpi=dpi)
+
+        # Xác định poppler_path nếu chạy trên Windows
+        if platform.system() == "Windows":
+            poppler_path = r"F:\poppler-24.08.0\Library\bin"  # sửa lại đúng đường dẫn máy bạn
+        else:
+            poppler_path = None  # Trên Linux (Streamlit Cloud) không cần
+
+        pages = convert_from_path(pdf_path, dpi=dpi, poppler_path=poppler_path)
         image_paths = []
 
         for i, page in enumerate(pages):
@@ -18,7 +25,7 @@ def pdf_to_images(pdf_path, output_dir, dpi=300, poppler_path=None):
             page.save(image_path, "JPEG", quality=95)
             image_paths.append(image_path)
 
-        return image_paths  # Trả về danh sách ảnh
+        return image_paths
     except Exception as e:
         print(f"✗ Error processing {pdf_path}: {e}")
         return []

@@ -44,7 +44,6 @@ def extract_tax_data_from_image(image_path):
     # Gửi request
     try:
         response = requests.post(
-            url="https://openrouter.ai/api/v1/chat/completions",
             headers=headers,
             data=json.dumps(data),
             timeout=30  # Thêm timeout để tránh treo
